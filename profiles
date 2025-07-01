@@ -1,0 +1,275 @@
+<!DOCTYPE html><html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Profiles</title>
+  <style>
+    * {
+      box-sizing: border-box;
+    }
+    body {
+      margin: 0;
+      font-family: sans-serif;
+      background-image: linear-gradient(135deg,#f9f9f9,#b1e2c1);
+      min-height: 100vh;
+     background-attachment: fixed;
+    /* font-family: 'segoe ui','helvetica neue',arial , sans-serif;*/
+    font-family:'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    
+    }
+    .navbar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 10px 20px;
+      background-color: #333;
+      color: white;
+      min-height: 60px;
+    }
+     .navbar button, .navbar h1 {
+      background: none;
+      border: none;
+      color: white;
+      font-size: 18px;
+      cursor: pointer;
+    }
+    .navbar h1 {
+      margin: 0;
+    }
+    .filter-panel {
+      display: none;
+      padding: 10px;
+      background-image: linear-gradient(135deg,#fff,#d8d8d8);
+      box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+      position: relative;
+      align-items: center;
+      border: 1px solid #000;
+    }
+    .filter-panel.show {
+      display: block;
+    }
+    .filters input, .filters select {
+      margin: 5px 10px 5px 0;
+      padding: 5px;
+    }
+     .filters input:hover, .filters select:hover {
+    background-image: linear-gradient(135deg,#fff,#dadada);
+     
+    }
+    .filter-panel button{
+     border-radius:3px;
+      color:rgb(255, 255, 255);
+      padding: 5px 15px;
+      background:linear-gradient(45deg,#03A062,#50c878);
+      border: 1px solid #00000000;
+      transition: .2s ease-in;
+    }
+   
+    .filter-panel button:hover{
+      border-radius:3px;
+      color:#000000;
+      padding: 5px 15px;
+      border: 1px solid #000000;
+      background:linear-gradient(45deg,#fff,#dadada);
+    }
+    #filterNumber{
+    border-radius:3px;
+    border:.1px solid black;
+    transition:.3s ease-in;
+    outline: none;
+    border-color: inherit; /* or set a specific border color */
+    box-shadow: none;
+    }
+
+
+
+option {
+  background-color: #fff;
+  color: #333;
+  padding: 10px;
+}
+option:focus{
+  color:green;
+}
+    .profiles {
+      padding: 10px;
+
+    }
+     .card:hover {
+    border: .8px solid #919191;
+    }
+    #profileContainer:hover > .card:not(:hover){
+    opacity:0.5;
+    }
+    .card {
+      background: white;
+      border-radius: 10px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+      margin-bottom: 10px;
+      overflow: hidden;
+      transition: all 0.3s ease;
+      cursor: pointer;
+    }
+
+    .card-header {
+      padding: 15px;
+      font-weight: bold;
+      display: flex;
+      flex-direction: column;
+    }
+    .card-details {
+      max-height: 0;
+      overflow: hidden;
+      transition: max-height 0.3s ease;
+      padding: 0 15px;
+    }
+    .card.expanded .card-details {
+      padding: 15px;
+      max-height: 400px;
+    }
+  </style>
+</head>
+<body>
+  <div class="navbar">
+    <button onclick="history.back()"><ion-icon size="medium" name="arrow-back-outline"></ion-icon></button>
+    <h1>Profiles</h1>
+    <div>
+      <button id="filterBtn"><ion-icon size="medium" name="search-outline"></ion-icon></button>
+      <button><ion-icon size="medium" name="add-circle-outline"></ion-icon></button>
+    </div>
+  </div>  <div id="filterPanel" class="filter-panel">
+    <div class="filters">
+      <input type="number" id="filterNumber" placeholder="Profile Number" />
+      <select id="filterPlace">
+        <option value="">All Places</option>
+        <option value="kasaragod">kasaragod</option>
+        <option value="Kannur">kannur</option>
+        <option value="Wayanad">wayanad</option>
+        <option value="Kozhikode">kozhikode</option>
+        <option value="Malappuram">malappuram</option>
+        <option value="Palakkad">palakkad</option>
+        <option value="Thrissur">thrissur</option>
+        <option value="Eranakulam">eranakulam</option>
+        <option value="Idukki">idukki</option>
+        <option value="Kottayam">kottayam</option>
+        <option value="Alappuzha">Alappuzha</option>
+        <option value="Pathanamthitta">pathanamthitta</option>
+        <option value="Kollam">kollam</option>
+        <option value="Thiruvananthapuram">thiruvananthapuram</option>
+      </select>
+      <select id="filterAge">
+        <option value="">All Ages</option>
+        <option value="18-20">18-20</option>
+        <option value="21-23">21-23</option>
+        <option value="24-26">24-26</option>
+        <option value="27-29">27-29</option>
+        <option value="30+">30+</option>
+      </select>
+      <button onclick="applyFilter()">Apply</button>
+    </div>
+  </div>  <div class="profiles" id="profileContainer"></div>  
+  <script>
+    const profiles = 
+    [
+  [1, 'Male', 29, 'Kozhikode', 'BA Economics', 'Academic Coordinator at Xylem', 'Fair', 'Upper Middle Class', '172cm', '', 'Average'],
+  [2, 'Male', 28, 'Alappuzha', 'Degree in Physiotherapy', 'Physiotherapist in Abu Dhabi', 'Wheatish', 'Middle Class', '170cm', '', 'Average'],
+  [3, 'Male', 25, 'Malappuram', 'B.Com', 'Working Abroad (Kuwait)', 'Wheatish', 'Middle Class', '173cm', '', 'Average'],
+  [4, 'Female', 21, 'Malappuram', 'Plus Two Science (NEET Repeater)', 'Student', 'Wheatish', 'Middle Class', '162cm', '', 'Average'],
+  [5, 'Male', 27, 'Malappuram', 'BA English', 'PRO Translator in Qatar', 'Light Fair', 'Middle Class', '167cm', '', 'Average'],
+  [6, 'Male', 27, 'Malappuram', 'Plus Two', 'Muallim (Religious Teacher)', 'Wheatish', 'Middle Class', '170cm', '', 'Average'],
+  [7, 'Male', 28, 'Kozhikode', 'MA English, Digital Marketing', 'Business Development Manager at Hilite Business Park', 'Fair', 'Middle Class', '171cm', '', 'Average'],
+  [8, 'Male', 26, 'Malappuram', 'BA Arabic (Al Qasimiyya University, Sharjah)', 'Arabic Teacher in Dubai', 'Fair', 'Middle Class', '173cm', '', 'Average'],
+  [9, 'Male', 25, 'Palakkad', 'Diploma in Automobile Engineering', 'Business', '—', 'Middle Class', '173cm', '', 'Slim'],
+  [10, 'Male', 28, 'Malappuram', 'Plus Two', 'Ustadh (Madrasa & School)', 'Wheatish', 'Middle Class', '173cm', '', 'Average']
+];
+    /*[
+      [100, 'Male', 21, 'Chennai', 'B.Tech', 'Engineer', 'Fair', 'Stable', '170cm', '60kg', 'Fit'],
+      [101, 'Female', 23, 'Mumbai', 'MBA', 'Manager', 'Wheatish', 'Rich', '165cm', '55kg', 'Slim'],
+      [102, 'Male', 30, 'Delhi', 'MCA', 'Developer', 'Dark', 'Middle', '175cm', '70kg', 'Average'],
+      [103, 'Female', 26, 'Kolkata', 'BA', 'Designer', 'Fair', 'Middle', '160cm', '50kg', 'Slim'],
+      [104, 'Male', 29, 'Bangalore', 'B.Sc', 'Analyst', 'Wheatish', 'Stable', '180cm', '75kg', 'Fit'],
+      [105, 'Female', 19, 'Chennai', 'B.Tech', 'Engineer', 'Fair', 'Rich', '162cm', '52kg', 'Slim'],
+      [106, 'Male', 22, 'Mumbai', 'MBA', 'Manager', 'Dark', 'Middle', '177cm', '68kg', 'Average'],
+      [107, 'Female', 21, 'Delhi', 'MCA', 'Developer', 'Fair', 'Stable', '158cm', '48kg', 'Slim'],
+      [108, 'Male', 24, 'Kolkata', 'BA', 'Designer', 'Wheatish', 'Rich', '165cm', '62kg', 'Fit'],
+      [109, 'Female', 30, 'Bangalore', 'B.Sc', 'Analyst', 'Dark', 'Middle', '167cm', '56kg', 'Average'],
+      [110, 'Male', 25, 'Chennai', 'B.Tech', 'Engineer', 'Fair', 'Stable', '172cm', '70kg', 'Fit'],
+      [111, 'Female', 28, 'Mumbai', 'MBA', 'Manager', 'Wheatish', 'Rich', '163cm', '54kg', 'Slim'],
+      [112, 'Male', 19, 'Delhi', 'MCA', 'Developer', 'Dark', 'Middle', '178cm', '69kg', 'Average'],
+      [113, 'Female', 20, 'Kolkata', 'BA', 'Designer', 'Fair', 'Stable', '160cm', '51kg', 'Slim'],
+      [114, 'Male', 22, 'Bangalore', 'B.Sc', 'Analyst', 'Wheatish', 'Stable', '182cm', '76kg', 'Fit'],
+      [115, 'Female', 27, 'Chennai', 'B.Tech', 'Engineer', 'Fair', 'Rich', '166cm', '53kg', 'Slim'],
+      [116, 'Male', 23, 'Mumbai', 'MBA', 'Manager', 'Dark', 'Middle', '175cm', '72kg', 'Average'],
+      [117, 'Female', 24, 'Delhi', 'MCA', 'Developer', 'Wheatish', 'Stable', '161cm', '49kg', 'Slim'],
+      [118, 'Male', 26, 'Kolkata', 'BA', 'Designer', 'Fair', 'Rich', '169cm', '67kg', 'Fit'],
+      [119, 'Female', 29, 'Bangalore', 'B.Sc', 'Analyst', 'Dark', 'Middle', '168cm', '57kg', 'Average'],
+      [120, 'Male', 28, 'Chennai', 'B.Tech', 'Engineer', 'Wheatish', 'Stable', '171cm', '71kg', 'Fit']
+    ];*/
+
+    const container = document.getElementById('profileContainer');
+
+    function renderProfiles(list) {
+      container.innerHTML = '';
+      list.forEach(profile => {
+        const card = document.createElement('div');
+        card.className = 'card';
+
+        card.innerHTML = `
+          <div class="card-header">
+            <div>Profile #: ${profile[0]}</div>
+            <div>Age: ${profile[2]}</div>
+            <div>Place: ${profile[3]}</div>
+          </div>
+          <div class="card-details">
+            <p>Gender: ${profile[1]}</p>
+            <p>Education: ${profile[4]}</p>
+            <p>Job: ${profile[5]}</p>
+            <p>Skin Color: ${profile[6]}</p>
+            <p>Financial: ${profile[7]}</p>
+            <p>Height: ${profile[8]}</p>
+            <p>Weight: ${profile[9]}</p>
+            <p>Body Type: ${profile[10]}</p>
+          </div>
+        `;
+
+        card.addEventListener('click', () => {
+          const isExpanded = card.classList.contains('expanded');
+          document.querySelectorAll('.card').forEach(c => c.classList.remove('expanded'));
+          if (!isExpanded) {
+            card.classList.add('expanded');
+          }
+        });
+
+        container.appendChild(card);
+      });
+    }
+
+    function applyFilter() {
+      const num = document.getElementById('filterNumber').value;
+      const place = document.getElementById('filterPlace').value;
+      const age = document.getElementById('filterAge').value;
+
+      let filtered = profiles.filter(p => {
+        let match = true;
+        if (num && p[0] != num) match = false;
+        if (place && p[3] !== place) match = false;
+        if (age) {
+          let [min, max] = age.includes('+') ? [30, 100] : age.split('-').map(Number);
+          if (p[2] < min || p[2] > max) match = false;
+        }
+        return match;
+      });
+      renderProfiles(filtered);
+    
+    }
+
+    document.getElementById('filterBtn').addEventListener('click', () => {
+      document.getElementById('filterPanel').classList.toggle('show');
+    });
+
+    renderProfiles(profiles);
+  </script>
+  <script type="module" src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.esm.js"></script>
+<script nomodule src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.js"></script>
+</body>
+</html>
