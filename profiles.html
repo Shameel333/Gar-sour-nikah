@@ -37,20 +37,25 @@
       margin: 0;
     }
     .filter-panel {
+      height: 100vh;
+      width: 75%;
       display: none;
+      flex-direction: column;
       padding: 10px;
       background-image: linear-gradient(135deg,#fff,#d8d8d8);
       box-shadow: 0 2px 4px rgba(0,0,0,0.1);
-      position: relative;
+      position: absolute;
       align-items: center;
       border: 1px solid #000;
+      z-index: 10;
     }
     .filter-panel.show {
-      display: block;
+      display: flex;
     }
     .filters input, .filters select {
       margin: 5px 10px 5px 0;
       padding: 5px;
+      width: 70%;
     }
      .filters input:hover, .filters select:hover {
     background-image: linear-gradient(135deg,#fff,#dadada);
@@ -58,11 +63,15 @@
     }
     .filter-panel button{
      border-radius:3px;
+     margin-left: 18%;
+     margin-top: 5%;
+     width: 100px;
       color:rgb(255, 255, 255);
       padding: 5px 15px;
       background:linear-gradient(45deg,#03A062,#50c878);
       border: 1px solid #00000000;
       transition: .2s ease-in;
+      font-weight: 700;
     }
    
     .filter-panel button:hover{
@@ -113,7 +122,6 @@ option:focus{
 
     .card-header {
       padding: 15px;
-      font-weight: bold;
       display: flex;
       flex-direction: column;
     }
@@ -125,7 +133,7 @@ option:focus{
     }
     .card.expanded .card-details {
       padding: 15px;
-      max-height: 400px;
+      max-height: 700px;
     }
   </style>
 </head>
@@ -141,70 +149,47 @@ option:focus{
     <div class="filters">
       <input type="number" id="filterNumber" placeholder="Profile Number" />
       <select id="filterPlace">
-        <option value="">All Places</option>
-        <option value="kasaragod">kasaragod</option>
-        <option value="Kannur">kannur</option>
-        <option value="Wayanad">wayanad</option>
-        <option value="Kozhikode">kozhikode</option>
-        <option value="Malappuram">malappuram</option>
-        <option value="Palakkad">palakkad</option>
-        <option value="Thrissur">thrissur</option>
-        <option value="Eranakulam">eranakulam</option>
-        <option value="Idukki">idukki</option>
-        <option value="Kottayam">kottayam</option>
-        <option value="Alappuzha">Alappuzha</option>
-        <option value="Pathanamthitta">pathanamthitta</option>
-        <option value="Kollam">kollam</option>
-        <option value="Thiruvananthapuram">thiruvananthapuram</option>
+        <option value="">ജില്ല</option>
+        <option value="കാസർഗോഡ്">കാസർഗോഡ്</option>
+        <option value="കണ്ണൂർ">കണ്ണൂർ</option>
+        <option value="വയനാട്">വയനാട്</option>
+        <option value="കോഴിക്കോട്">കോഴിക്കോട്</option>
+        <option value="മലപ്പുറം">മലപ്പുറം</option>
+        <option value="പാലക്കാട്">പാലക്കാട്</option>
+        <option value="തൃശ്ശൂർ">തൃശ്ശൂർ</option>
+        <option value="എറണാകുളം">എറണാകുളം</option>
+        <option value="ഇടുക്കി">ഇടുക്കി</option>
+        <option value="കോട്ടയം">കോട്ടയം</option>
+        <option value="ആലപ്പുഴ">ആലപ്പുഴ</option>
+        <option value="പത്തനംതിട്ട">പത്തനംതിട്ട</option>
+        <option value="കൊല്ലം">കൊല്ലം</option>
+        <option value="തിരുവനന്തപുരം">തിരുവനന്തപുരം</option>
       </select>
       <select id="filterAge">
-        <option value="">All Ages</option>
+        <option value="">വയസ്സ്</option>
         <option value="18-20">18-20</option>
         <option value="21-23">21-23</option>
         <option value="24-26">24-26</option>
         <option value="27-29">27-29</option>
         <option value="30+">30+</option>
       </select>
-      <button onclick="applyFilter()">Apply</button>
+      <select id="filterGender">
+        <option value="വരൻ">വരൻ</option>
+        <option value="വധു">വധു</option>
+      </select>
+      <br>
+      <button onclick="applyFilter()">Search</button>
     </div>
   </div>  <div class="profiles" id="profileContainer"></div>  
   <script>
     const profiles = 
     [
-  [1, 'Male', 29, 'Kozhikode', 'BA Economics', 'Academic Coordinator at Xylem', 'Fair', 'Upper Middle Class', '172cm', '', 'Average'],
-  [2, 'Male', 28, 'Alappuzha', 'Degree in Physiotherapy', 'Physiotherapist in Abu Dhabi', 'Wheatish', 'Middle Class', '170cm', '', 'Average'],
-  [3, 'Male', 25, 'Malappuram', 'B.Com', 'Working Abroad (Kuwait)', 'Wheatish', 'Middle Class', '173cm', '', 'Average'],
-  [4, 'Female', 21, 'Malappuram', 'Plus Two Science (NEET Repeater)', 'Student', 'Wheatish', 'Middle Class', '162cm', '', 'Average'],
-  [5, 'Male', 27, 'Malappuram', 'BA English', 'PRO Translator in Qatar', 'Light Fair', 'Middle Class', '167cm', '', 'Average'],
-  [6, 'Male', 27, 'Malappuram', 'Plus Two', 'Muallim (Religious Teacher)', 'Wheatish', 'Middle Class', '170cm', '', 'Average'],
-  [7, 'Male', 28, 'Kozhikode', 'MA English, Digital Marketing', 'Business Development Manager at Hilite Business Park', 'Fair', 'Middle Class', '171cm', '', 'Average'],
-  [8, 'Male', 26, 'Malappuram', 'BA Arabic (Al Qasimiyya University, Sharjah)', 'Arabic Teacher in Dubai', 'Fair', 'Middle Class', '173cm', '', 'Average'],
-  [9, 'Male', 25, 'Palakkad', 'Diploma in Automobile Engineering', 'Business', '—', 'Middle Class', '173cm', '', 'Slim'],
-  [10, 'Male', 28, 'Malappuram', 'Plus Two', 'Ustadh (Madrasa & School)', 'Wheatish', 'Middle Class', '173cm', '', 'Average']
+  [1,'വരനെ തേടുന്നു','ആദ്യ വിവാഹം',29,'കോഴിക്കോട്','സുന്നി യുവാവ്','BA Economics','10th','Academic Coordinator at Xylem','കറുപ്പ്','172cm','Average','Upper Middle Class','Adivaram','Malappuram','22','+917511159923','+919961159923','അനുയോജ്യമായ വിവാഹാലോചനകൾ ക്ഷണിക്കുന്നു'],
+  [2,'വധുവിനെ തേടുന്നു','ആദ്യ വിവാഹം',25,'വയനാട്', 'എറണാകുളം','സുന്നി പണ്ഡിത യുവാവ്','Digree','സഖാഫി','പള്ളി, മദ്രസ, Graphic Designing','ഇരുനിറം','',  'Height not specified','Average','Middle Class','കാവനൂർ','മലപ്പുറം','18 - 19','+917034810685','+919207587597','അനുയോജ്യമായ വിവാഹാലോചനകൾ ക്ഷണിക്കുന്നു'],
+  [3,'വധുവിനെ തേടുന്നു','ആദ്യ വിവാഹം',25,'ഇടുക്കി','സുന്നി പണ്ഡിത യുവാവ്','Digree','സഖാഫി','പള്ളി, മദ്രസ, Graphic Designing','ഇരുനിറം','','Average','Middle Class','കാവനൂർ','മലപ്പുറം','18 - 19','+917034810685','+919207587597','അനുയോജ്യമായ വിവാഹാലോചനകൾ ക്ഷണിക്കുന്നു']
+
 ];
-    /*[
-      [100, 'Male', 21, 'Chennai', 'B.Tech', 'Engineer', 'Fair', 'Stable', '170cm', '60kg', 'Fit'],
-      [101, 'Female', 23, 'Mumbai', 'MBA', 'Manager', 'Wheatish', 'Rich', '165cm', '55kg', 'Slim'],
-      [102, 'Male', 30, 'Delhi', 'MCA', 'Developer', 'Dark', 'Middle', '175cm', '70kg', 'Average'],
-      [103, 'Female', 26, 'Kolkata', 'BA', 'Designer', 'Fair', 'Middle', '160cm', '50kg', 'Slim'],
-      [104, 'Male', 29, 'Bangalore', 'B.Sc', 'Analyst', 'Wheatish', 'Stable', '180cm', '75kg', 'Fit'],
-      [105, 'Female', 19, 'Chennai', 'B.Tech', 'Engineer', 'Fair', 'Rich', '162cm', '52kg', 'Slim'],
-      [106, 'Male', 22, 'Mumbai', 'MBA', 'Manager', 'Dark', 'Middle', '177cm', '68kg', 'Average'],
-      [107, 'Female', 21, 'Delhi', 'MCA', 'Developer', 'Fair', 'Stable', '158cm', '48kg', 'Slim'],
-      [108, 'Male', 24, 'Kolkata', 'BA', 'Designer', 'Wheatish', 'Rich', '165cm', '62kg', 'Fit'],
-      [109, 'Female', 30, 'Bangalore', 'B.Sc', 'Analyst', 'Dark', 'Middle', '167cm', '56kg', 'Average'],
-      [110, 'Male', 25, 'Chennai', 'B.Tech', 'Engineer', 'Fair', 'Stable', '172cm', '70kg', 'Fit'],
-      [111, 'Female', 28, 'Mumbai', 'MBA', 'Manager', 'Wheatish', 'Rich', '163cm', '54kg', 'Slim'],
-      [112, 'Male', 19, 'Delhi', 'MCA', 'Developer', 'Dark', 'Middle', '178cm', '69kg', 'Average'],
-      [113, 'Female', 20, 'Kolkata', 'BA', 'Designer', 'Fair', 'Stable', '160cm', '51kg', 'Slim'],
-      [114, 'Male', 22, 'Bangalore', 'B.Sc', 'Analyst', 'Wheatish', 'Stable', '182cm', '76kg', 'Fit'],
-      [115, 'Female', 27, 'Chennai', 'B.Tech', 'Engineer', 'Fair', 'Rich', '166cm', '53kg', 'Slim'],
-      [116, 'Male', 23, 'Mumbai', 'MBA', 'Manager', 'Dark', 'Middle', '175cm', '72kg', 'Average'],
-      [117, 'Female', 24, 'Delhi', 'MCA', 'Developer', 'Wheatish', 'Stable', '161cm', '49kg', 'Slim'],
-      [118, 'Male', 26, 'Kolkata', 'BA', 'Designer', 'Fair', 'Rich', '169cm', '67kg', 'Fit'],
-      [119, 'Female', 29, 'Bangalore', 'B.Sc', 'Analyst', 'Dark', 'Middle', '168cm', '57kg', 'Average'],
-      [120, 'Male', 28, 'Chennai', 'B.Tech', 'Engineer', 'Wheatish', 'Stable', '171cm', '71kg', 'Fit']
-    ];*/
+
 
     const container = document.getElementById('profileContainer');
 
@@ -216,19 +201,27 @@ option:focus{
 
         card.innerHTML = `
           <div class="card-header">
-            <div>Profile #: ${profile[0]}</div>
-            <div>Age: ${profile[2]}</div>
-            <div>Place: ${profile[3]}</div>
+            <div>Profile Number : ${profile[0]}</div>
+            <div> ${profile[1]}</div>
+            <div>${profile[2]}</div>
+            <div>വയസ്സ് ; ${profile[3]}</div>
+            <div>ജില്ല :${profile[4]}</div>
           </div>
           <div class="card-details">
-            <p>Gender: ${profile[1]}</p>
-            <p>Education: ${profile[4]}</p>
-            <p>Job: ${profile[5]}</p>
-            <p>Skin Color: ${profile[6]}</p>
-            <p>Financial: ${profile[7]}</p>
-            <p>Height: ${profile[8]}</p>
-            <p>Weight: ${profile[9]}</p>
-            <p>Body Type: ${profile[10]}</p>
+            <p> ${profile[5]}</p>
+             <p>വിദ്യാഭ്യാസം:${profile[6]}</p>
+            <p>മത പഠനം:${profile[7]}</p>
+            <p>ജോലി: ${profile[8]}</p>
+            <p>നിറം : ${profile[9]}</p>
+            <p>ഉയരം: ${profile[10]}</p>
+            <p>ശരീര രൂപം: ${profile[11]}</p>
+            <p>സാമ്പത്തികം: ${profile[12]}</p>
+            <p>സ്ഥലം: ${profile[13]}</p>
+            <p>പരിഗണിക്കുന്ന ജില്ലകൾ : ${profile[14]}</p>
+            <p>പരിഗണിക്കുന്ന പ്രായം: ${profile[15]}</p>
+            <p>Contact Number: ${profile[16]}</p>
+            <p>WhatsApp Number ${profile[17]}</p>
+            <p>Notes: ${profile[18]}</p>
           </div>
         `;
 
@@ -246,16 +239,16 @@ option:focus{
 
     function applyFilter() {
       const num = document.getElementById('filterNumber').value;
-      const place = document.getElementById('filterPlace').value;
+      const ജില്ല  = document.getElementById('filterPlace').value;
       const age = document.getElementById('filterAge').value;
 
       let filtered = profiles.filter(p => {
         let match = true;
         if (num && p[0] != num) match = false;
-        if (place && p[3] !== place) match = false;
+        if (ജില്ല && p[4] !== ജില്ല ) match = false;
         if (age) {
           let [min, max] = age.includes('+') ? [30, 100] : age.split('-').map(Number);
-          if (p[2] < min || p[2] > max) match = false;
+          if (p[3] < min || p[3] > max) match = false;
         }
         return match;
       });
