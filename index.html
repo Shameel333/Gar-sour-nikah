@@ -20,7 +20,7 @@
       <nav class="menu">
         <a href="#home" class="scroll-link">Home</a>
         <a href="#about" class="scroll-link">About</a>
-        <a href="profiles.html" class="scroll-link-1">profiles</a>
+        <a href="new profiles.html" class="scroll-link-1">profiles</a>
         <a href="#faq" class="scroll-link">faq</a>
         <a href="#contact" class="scroll-link">Contact</a>
       </nav>
@@ -42,7 +42,7 @@
   </section>
   <section id="about">
     <div class="about">
-      <h2>Rules</h2>
+      <h2>Terms & Conditions</h2>
       <div class="aboutcard">
         <ul>
           <li> ഇത് സുന്നികൾക്ക് വേണ്ടി മാത്രമായുള്ള വെബ്സൈറ്റാണ്. സുന്നികൾ അല്ലാത്തവരുടെ വിവാഹ പരസ്യങ്ങൾ ഇതിൽ പോസ്റ്റ്
@@ -73,7 +73,7 @@
       <div class="prosec">
         <div class="prolink">
           <p>പ്രൊഫൈലുകൾ കാണാൻ ഇവിടെ ക്ലിക്ക് ചെയ്യുക.</p>
-          <button class="browse-btn"><a href="profiles.html">Profiles</a></button>
+          <button class="browse-btn"><a href="new profiles.html">Profiles</a></button>
         </div>
       </div>
     </div>
@@ -81,9 +81,10 @@
   <div class="wa">
     <h4>Join WhatsApp Group</h4>
     <p> വാട്സാപ്പ് ഗ്രൂപ്പിൽ ജോയിൻ ചെയ്യാൻ ഇവിടെ ക്ലിക്ക് ചെയ്യുക</p>
-    <a href="https://chat.whatsapp.com/G1NS08ICejyDtlMYgAYcaO?mode=ac_c"><button>Join</button></a>
+    <a href="https://chat.whatsapp.com/G1NS08ICejyDtlMYgAYcaO?mode=ac_c"><button class="browse-btn">Join</button></a>
   </div>
   <section class="contact" id="contact">
+    <p>പുതിയ പ്രൊഫൈലുകൾ ചേർക്കാനും മറ്റു സഹായങ്ങൾക്കും വാട്സാപ്പിൽ മെസ്സേജ് ചെയ്യുക.</p>
     <h2>Contact Us</h2>
     <div class="contact-icons">
       <!-- <a ><i class="fab fa-instagram"></i></a>
@@ -236,7 +237,7 @@
     opacity: 60%;
   }
 
-  .wa button {
+  .wa buttond{
     color: white;
     background: linear-gradient(45deg, #03A062, #50c878);
     height: 40px;
@@ -413,13 +414,34 @@
   }
 </style>
 <script type="text/javascript">
+  // function toggleMenu() {
+  //   document.querySelector(".menu").classList.toggle("active");
+  //   document.querySelector(".menu-toggle").classList.toggle("active");
+  // }
+  // document.querySelectorAll('.scroll-link').forEach(link => {
+  //   link.addEventListener('click', function (e) {
+  //     e.preventDefault(); // Prevent default jump behavior
+  //     const targetId = this.getAttribute('href').substring(1);
+  //     const targetElement = document.getElementById(targetId);
+  //     if (targetElement) {
+  //       window.scrollTo({
+  //         top: targetElement.offsetTop,
+  //         behavior: 'smooth'
+  //       });
+  //     }
+  //     // Close the menu after clicking
+  //     document.querySelector(".menu").classList.remove("active");
+  //     document.querySelector(".menu-toggle").classList.remove("active");
+  //   });
+  // });
   function toggleMenu() {
     document.querySelector(".menu").classList.toggle("active");
     document.querySelector(".menu-toggle").classList.toggle("active");
   }
+
   document.querySelectorAll('.scroll-link').forEach(link => {
     link.addEventListener('click', function (e) {
-      e.preventDefault(); // Prevent default jump behavior
+      e.preventDefault();
       const targetId = this.getAttribute('href').substring(1);
       const targetElement = document.getElementById(targetId);
       if (targetElement) {
@@ -428,9 +450,22 @@
           behavior: 'smooth'
         });
       }
-      // Close the menu after clicking
       document.querySelector(".menu").classList.remove("active");
       document.querySelector(".menu-toggle").classList.remove("active");
     });
   });
+
+  // 👇 Close menu when clicking outside
+  document.addEventListener('click', function (event) {
+    const menu = document.querySelector('.menu');
+    const toggle = document.querySelector('.menu-toggle');
+    const isClickInsideMenu = menu.contains(event.target);
+    const isClickOnToggle = toggle.contains(event.target);
+
+    if (!isClickInsideMenu && !isClickOnToggle) {
+      menu.classList.remove('active');
+      toggle.classList.remove('active');
+    }
+  });
+
 </script>
